@@ -1543,7 +1543,7 @@ contract("YieldContract", function (accounts) {
       newStartTime = result.startTime;
 
       // Assert
-      assert.deepEqual(newStartTime.sub(oldStartTime).toNumber() > 0,true, "Start time not updated");
+      assert.deepEqual(newStartTime.toString(),oldStartTime.toString(), "Start time updated");
       assert.deepEqual(result.contractOwner,bob,"Contract owner not update");
       assert.deepEqual(result.contractStatus.toString(),"1","Contract status not changed to active");
     });
@@ -1871,7 +1871,7 @@ contract("YieldContract", function (accounts) {
 
       // Assert
       assert.deepEqual(bobBalanceBefore.sub(bobBalanceAfter).toString(),collateral.toString(),"Collateral not received properly");
-      assert.deepEqual(startTimeAfter.sub(startTimeBefore).toNumber() > 0,true,"Start time not update correctly");
+      assert.deepEqual(startTimeAfter.toString(),startTimeBefore.toString(),"Start time updated");
       assert.deepEqual(result.contractOwner,bob,"Owner not updated correctly");
       assert.deepEqual(result.contractStatus.toString(),"1","Contract status not updated correctly");
 

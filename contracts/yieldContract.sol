@@ -706,7 +706,6 @@ contract YieldContract is Ownable, ReentrancyGuard {
     }
 
     // Updating contract 
-    contractMap[_contractId].startTime = now;
     contractMap[_contractId].contractOwner = msg.sender;
     contractMap[_contractId].contractStatus = Status.active;
 
