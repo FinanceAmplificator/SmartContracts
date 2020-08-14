@@ -631,12 +631,12 @@ contract YieldContract is Ownable, ReentrancyGuard {
 
     // Calculate mxxMintedTillDate
     uint256 numerator = SafeMath.mul(SafeMath.sub(now, contractMap[_contractId].startTime),contractMap[_contractId].mxxToBeMinted);
-    uint256 denominator = SafeMath.mul(contractMap[_contractId].tenure, 1 days);
+    uint256 denominator = SafeMath.sub(contractMap[_contractId].endTime, contractMap[_contractId].startTime);
     uint256 mxxMintedTillDate = SafeMath.div(numerator,denominator);
 
     // Calculate penaltyPercent
     numerator = SafeMath.mul(SafeMath.sub(maxEarlyRedeemFee, minEarlyRedeemFee),SafeMath.sub(now, contractMap[_contractId].startTime));
-    denominator = SafeMath.mul(contractMap[_contractId].tenure, 1 days);
+    denominator = SafeMath.sub(contractMap[_contractId].endTime, contractMap[_contractId].startTime);
     uint256 penaltyPercent = SafeMath.sub(maxEarlyRedeemFee,SafeMath.div(numerator,denominator));
 
     // Calculate penaltyMXXToBurn
