@@ -295,6 +295,49 @@ contract("YieldContract", function (accounts) {
       assert(true);
     });
   });
+
+  it("should not allow owner to remove valid MXX ERC20", function () {
+    // Define variables
+    let multiplierInstance;
+    let YieldContractInstance;
+    let tetherInstance;
+    let owner = accounts[0];
+
+    // Deploy multiplier contract
+    return Multiplier.deployed()
+      .then(function (instance) {
+        multiplierInstance = instance;
+
+        // Deploy yield contract
+        return YieldContract.deployed(
+          multiplierInstance.address,
+          "10000000000000000"
+        );
+      })
+      .then(function (instance) {
+        YieldContractInstance = instance;
+
+        // Deploy tether
+        return Tether.deployed();
+      })
+      .then(function (instance) {
+        tetherInstance = instance;
+
+        // Attempt to remove MXX from list by owner
+        return YieldContractInstance.removeValidERC20(
+          multiplierInstance.address,
+          {
+            from: owner,
+          }
+        );
+      })
+      .catch(function (error) {
+
+        // Print error
+        console.log(error.message);
+        assert(true);
+      });
+  });
   
   it("should allow owner to remove valid ERC20 (Tether)", function () {
     
