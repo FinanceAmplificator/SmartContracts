@@ -424,6 +424,10 @@ contract("YieldContract", function (accounts) {
       return YieldContractInstance.createYieldContract(ethAddress, collateral, tenureInDays, {from : owner, value: ethValue});
     }).then(function(result){
 
+      var gas = Number(result);
+
+      console.log("gas estimation = " + result.receipt.gasUsed + " units");
+
       // Assert
       assert.deepEqual(result['receipt']['status'],true,"Yield contract added successfully");
     });
@@ -474,20 +478,18 @@ contract("YieldContract", function (accounts) {
       console.log(result.startTime.toString());
       console.log(result.endTime.toString());
       console.log(result.collateral.toString());
-      console.log(result.interest.toString());
       console.log(result.tenure.toString());
+      console.log(result.interest.toString());
       console.log(result.mxxToBeMinted.toString());
-      console.log(result.mxxToBeBurnt.toString());
       console.log(result.contractStatus.toString());
 
       // Assert
       assert.deepEqual(result.contractOwner,owner,"Yield Contract Owner not returned properly");
       assert.deepEqual(result.tokenAddress,ethAddress,"Yield Collateral Address not returned properly");
       assert.deepEqual(result.collateral.toString(),collateral,"Yield Collateral not returned properly");
-      assert.deepEqual(result.interest.toString(),"500000","Yield APY not returned properly");
       assert.deepEqual(result.tenure.toString(),"90","Yield tenure not returned properly");
+      assert.deepEqual(result.interest.toString(),"500000","Yield APY not returned properly");
       assert.deepEqual(result.mxxToBeMinted.toString(),"702739726027","MXX minted not returned properly");
-      assert.deepEqual(result.mxxToBeBurnt.toString(),"70273972602","MXX burnt not returned properly");
       assert.deepEqual(result.contractStatus.toString(),"1","Contract status not returned properly");
     });
   });
@@ -538,6 +540,9 @@ contract("YieldContract", function (accounts) {
 
     }).then(function(result){
 
+      console.log("Gas used");
+      console.log(result.receipt.gasUsed);
+
       // Get contract list
       return YieldContractInstance.getSubsetYieldContracts(0,100,{ from: owner });
     
@@ -559,20 +564,18 @@ contract("YieldContract", function (accounts) {
       console.log(result.startTime.toString());
       console.log(result.endTime.toString());
       console.log(result.collateral.toString());
-      console.log(result.interest.toString());
       console.log(result.tenure.toString());
+      console.log(result.interest.toString());
       console.log(result.mxxToBeMinted.toString());
-      console.log(result.mxxToBeBurnt.toString());
       console.log(result.contractStatus.toString());
 
       // Assert
       assert.deepEqual(result.contractOwner,owner,"Yield Contract Owner not returned properly");
       assert.deepEqual(result.tokenAddress,tetherInstance.address,"Yield Collateral Address not returned properly");
       assert.deepEqual(result.collateral.toString(),collateral,"Yield Collateral not returned properly");
-      assert.deepEqual(result.interest.toString(),"1000000","Yield APY not returned properly");
       assert.deepEqual(result.tenure.toString(),"180","Yield tenure not returned properly");
+      assert.deepEqual(result.interest.toString(),"1000000","Yield APY not returned properly");
       assert.deepEqual(result.mxxToBeMinted.toString(),"2474383561","MXX minted not returned properly");
-      assert.deepEqual(result.mxxToBeBurnt.toString(),"247438356","MXX burnt not returned properly");
       assert.deepEqual(result.contractStatus.toString(),"1","Contract status not returned properly");
     });
   });
@@ -708,12 +711,11 @@ contract("YieldContract", function (accounts) {
       });
     }).then(function(result){
 
-      mxxBurnt = result.mxxToBeBurnt;
       mxxMinted = result.mxxToBeMinted;
 
       assert.deepEqual(initialOwnerTetherBalance.sub(finalOwnerTetherBalance).toString(),collateral,"Tether not sent properly");
       assert.deepEqual(finalContractTetherBalance.sub(initialContractTetherBalance).toString(),collateral,"Tether not received properly");
-      assert.deepEqual(initialOwnerMXXBalance.sub(finalOwnerMXXBalance).toString(),mxxBurnt.toString(),"MXX not burnt properly");
+      assert.deepEqual(initialOwnerMXXBalance.sub(finalOwnerMXXBalance).toNumber() > 0,true,"MXX not burnt properly");
       assert.deepEqual(mxxMintedFromContractAfter.sub(mxxMintedFromContractBefore).toString(),mxxMinted.toString(),"Total MXX minted updated properly");
       assert.deepEqual(finalAllContractsLength - initialAllContractsLength,1,"All contract list not updated properly");
     });
@@ -1076,10 +1078,9 @@ contract("YieldContract", function (accounts) {
       console.log(result.startTime.toString());
       console.log(result.endTime.toString());
       console.log(result.collateral.toString());
-      console.log(result.interest.toString());
       console.log(result.tenure.toString());
+      console.log(result.interest.toString());
       console.log(result.mxxToBeMinted.toString());
-      console.log(result.mxxToBeBurnt.toString());
       console.log(result.contractStatus.toString());
 
       // Move 10 seconds
@@ -1139,10 +1140,9 @@ contract("YieldContract", function (accounts) {
       console.log(result.startTime.toString());
       console.log(result.endTime.toString());
       console.log(result.collateral.toString());
-      console.log(result.interest.toString());
       console.log(result.tenure.toString());
+      console.log(result.interest.toString());
       console.log(result.mxxToBeMinted.toString());
-      console.log(result.mxxToBeBurnt.toString());
       console.log(result.contractStatus.toString());
 
       console.log("COLLATERAL RETURNED TO USER");
@@ -1249,10 +1249,9 @@ contract("YieldContract", function (accounts) {
       console.log(result.startTime.toString());
       console.log(result.endTime.toString());
       console.log(result.collateral.toString());
-      console.log(result.interest.toString());
       console.log(result.tenure.toString());
+      console.log(result.interest.toString());
       console.log(result.mxxToBeMinted.toString());
-      console.log(result.mxxToBeBurnt.toString());
       console.log(result.contractStatus.toString());
 
       // Move 10 seconds
@@ -1312,10 +1311,9 @@ contract("YieldContract", function (accounts) {
       console.log(result.startTime.toString());
       console.log(result.endTime.toString());
       console.log(result.collateral.toString());
-      console.log(result.interest.toString());
       console.log(result.tenure.toString());
+      console.log(result.interest.toString());
       console.log(result.mxxToBeMinted.toString());
-      console.log(result.mxxToBeBurnt.toString());
       console.log(result.contractStatus.toString());
 
       console.log("COLLATERAL RETURNED TO USER");
@@ -2237,4 +2235,4 @@ contract("YieldContract", function (accounts) {
     });
   });
 
-});
+ });

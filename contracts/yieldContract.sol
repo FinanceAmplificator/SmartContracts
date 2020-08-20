@@ -87,26 +87,24 @@ contract YieldContract is Ownable, ReentrancyGuard {
    * @dev - A struct to store yield contract details
    * @notice contractOwner - The owner of the yield contract
    * @notice tokenAddress - ERC20 contract address (if ETH then address(0))
-   * @notice collateral - Value of collateral (multiplied by 10 power 18 to handle decimals)
    * @notice startTime - Start time of the yield contract (in unix timestamp)
    * @notice endTime - End time of the yield contract (in unix timestamp)
-   * @notice interest - APY or Annual Percentage Yield (returned from tenureApyMap)
-   * @notice tenure - The agreement tenure in days
-   * @notice mxxToBeMinted - The final MXX token value to be returned to the contract owner
-   * @notice mxxToBeBurnt - The MXX value to be burnt from user's account when creating a contract
+   * @notice tenure - The agreement tenure in days   
    * @notice contractStatus - The status of a contract (can be inactive/active/openMarket/Claimed)
+   * @notice collateral - Value of collateral (multiplied by 10 power 18 to handle decimals)
+   * @notice mxxToBeMinted - The final MXX token value to be returned to the contract owner
+   * @notice interest - APY or Annual Percentage Yield (returned from tenureApyMap)
    */  
   struct contractDetails {
     address contractOwner;
-    address tokenAddress;
-    uint256 collateral;
-    uint256 startTime;
-    uint256 endTime;
-    uint256 interest;
+    uint48 startTime;
+    uint48 endTime;
+    address tokenAddress;    
     uint16 tenure;
+    uint64 interest;
+    uint8 contractStatus; 
+    uint256 collateral;
     uint256 mxxToBeMinted;
-    uint256 mxxToBeBurnt;
-    Status contractStatus; 
   }
 
   /**
@@ -118,13 +116,13 @@ contract YieldContract is Ownable, ReentrancyGuard {
    * @dev - A mapping to map tenure in days to apy (Annual Percentage Yield aka interest rate)
    * Percent rate is multiplied by 10 power 6. (For e.g. if 5% then value is 0.05 * 10 power 6)
    */ 
-  mapping(uint16 => uint256) public tenureApyMap;
+  mapping(uint16 => uint64) public tenureApyMap;
 
   /**
    * @dev - Variable to store contract fee
    * If 10% then value is 0.1 * 10 power 6
    */ 
-  uint256 public contractFee;
+  uint64 public contractFee;
 
   /**
    * @dev - Variable to store MXX ERC20 token address
@@ -151,8 +149,8 @@ contract YieldContract is Ownable, ReentrancyGuard {
    * If min penalty / redeem fee is 5% then value is 0.05 * 10 power 6
    * If max penalty / redeem fee is 50% then value is 0.5 * 10 power 6
    */ 
-  uint256 public minEarlyRedeemFee;
-  uint256 public maxEarlyRedeemFee;
+  uint64 public minEarlyRedeemFee;
+  uint64 public maxEarlyRedeemFee;
 
   /**
    * DEFINING EVENTS
@@ -168,21 +166,21 @@ contract YieldContract is Ownable, ReentrancyGuard {
    * @notice interest - APY or Annual Percentage Yield (returned from tenureApyMap)
    * @notice tenure - The agreement tenure in days
    * @notice mxxToBeMinted - The final MXX token value to be returned to the contract owner
-   * @notice mxxToBeBurnt - The MXX value to be burnt from user's account when creating a contract
    * @notice contractStatus - The status of a contract (can be inactive/active/openMarket/Claimed)
    */ 
 
+/*
   event yieldContractStatus(
   address contractOwner, 
   address tokenAddress, 
   uint256 collateral, 
-  uint256 startTime, 
-  uint256 endTime, 
-  uint256 interest, 
+  uint48 startTime,
+  uint48 endTime,  
   uint16 tenure, 
+  uint64 interest,
   uint256 mxxToBeMinted, 
-  uint256 mxxToBeBurnt, 
   string contractStatus);
+*/
 
   /**
    * CONSTRUCTOR FUNCTION
@@ -191,13 +189,13 @@ contract YieldContract is Ownable, ReentrancyGuard {
   constructor(address _mxxAddress, uint256 _mxxmFactor) public Ownable() {
 
     // Setting default variables
-    tenureApyMap[90] = SafeMath.mul(50, 10 ** 4);
-    tenureApyMap[180] = SafeMath.mul(100, 10 ** 4);
-    tenureApyMap[270] = SafeMath.mul(300, 10 ** 4);
-    contractFee = SafeMath.mul(10, 10 ** 4);
+    tenureApyMap[90] = uint64(SafeMath.mul(50, 10 ** 4));
+    tenureApyMap[180] = uint64(SafeMath.mul(100, 10 ** 4));
+    tenureApyMap[270] = uint64(SafeMath.mul(300, 10 ** 4));
+    contractFee = uint64(SafeMath.mul(10, 10 ** 4));
     totalAllocatedMxx = SafeMath.mul(1000000000, 10 ** 8); // 1 billion initial Mxx allocated //
-    minEarlyRedeemFee = SafeMath.mul(5, 10 ** 4);
-    maxEarlyRedeemFee = SafeMath.mul(50, 10 ** 4);
+    minEarlyRedeemFee = uint64(SafeMath.mul(5, 10 ** 4));
+    maxEarlyRedeemFee = uint64(SafeMath.mul(50, 10 ** 4));
     mxxMintedFromContract = 0;
     burnAddress = 0x19B292c1a84379Aab41564283e7f75bF20e45f91; // Official Burn Address //
 
@@ -234,49 +232,6 @@ contract YieldContract is Ownable, ReentrancyGuard {
     // If no value matches, revert
     revert();
   }
-  
-  /**
-   * @dev This function will emit contract status
-   * @param _contractId - The id of the contract
-   * Access Control: This contract or derived contract
-   */
-
-  function emitContractStatus(bytes32 _contractId) internal {
-
-    // Emit event
-    emit yieldContractStatus(
-    contractMap[_contractId].contractOwner,
-    contractMap[_contractId].tokenAddress,
-    contractMap[_contractId].collateral,
-    contractMap[_contractId].startTime,
-    contractMap[_contractId].endTime,
-    contractMap[_contractId].interest,
-    contractMap[_contractId].tenure,
-    contractMap[_contractId].mxxToBeMinted,
-    contractMap[_contractId].mxxToBeBurnt,
-    getContractStatusKey(contractMap[_contractId].contractStatus)
-    );
-
-  }
-
-  /**
-   * @dev This function will return the key of the contract status in string
-   * @param _status - Status of the contract in Status enum type or uint
-   * @return - Status of the contract - inactive/active/claimed/openMarket
-   * @notice - Fails with improper input
-   * Access Control: This contract or derived contract
-   */
-  
-  function getContractStatusKey(Status _status) internal pure returns(string memory ) {
-
-    // Check for status. If status match, return status as string
-    if(Status.inactive == _status) return "inactive";
-    if(Status.active == _status) return "active";
-    if(Status.openMarket == _status) return "openMarket";
-    if(Status.claimed == _status) return "claimed";
-  } 
-
-  
 
   /**
    * GENERAL FUNCTIONS
@@ -290,7 +245,7 @@ contract YieldContract is Ownable, ReentrancyGuard {
    * Access Control: Only Owner
    */
   
-  function setInterest(uint16 _tenure, uint256 _interestRate) public onlyOwner() returns(bool ) {
+  function setInterest(uint16 _tenure, uint64 _interestRate) public onlyOwner() returns(bool ) {
     tenureApyMap[_tenure] = _interestRate;
     return true;
   }
@@ -305,11 +260,11 @@ contract YieldContract is Ownable, ReentrancyGuard {
 
   function setParamType(paramType _parameter, uint256 _value) public onlyOwner() returns(bool ) {
     if(_parameter == paramType.contractFee) {
-      contractFee = _value;
+      contractFee = uint64(_value);
     } else if(_parameter == paramType.minEarlyRedeemFee) {
-      minEarlyRedeemFee = _value;
+      minEarlyRedeemFee = uint64(_value);
     } else if(_parameter == paramType.maxEarlyRedeemFee) {
-      maxEarlyRedeemFee = _value;
+      maxEarlyRedeemFee = uint64(_value);
     } else if(_parameter == paramType.totalAllocatedMxx) {
       totalAllocatedMxx = _value;
     }
@@ -329,9 +284,9 @@ contract YieldContract is Ownable, ReentrancyGuard {
   function addValidERC20(address _ERC20Address, uint256 _mFactor) public onlyOwner() returns(bool ) {
 
     // Check for existing contracts and validity. If condition fails, revert
-    require(_ERC20Address == address(0) || Address.isContract(_ERC20Address),"Input address is not a contract address");
+    require(_ERC20Address == address(0) || Address.isContract(_ERC20Address),"Not contract address");
     require(ERC20Map[_ERC20Address].noContracts == 0, "Token has existing contracts");
-    require(!ERC20Map[_ERC20Address].isValid, "Token is already available in the contract");
+    require(!ERC20Map[_ERC20Address].isValid, "Token already available");
 
     // Add token details and return true
     // If _ERC20Address = address(0) then it is ETH else ERC20
@@ -361,14 +316,12 @@ contract YieldContract is Ownable, ReentrancyGuard {
   function addValidERC20List(address[] memory _ERC20AddressList, uint256[] memory _mFactorList) public onlyOwner() returns(bool ) {
 
     // Check if the length of 2 input arrays are the same else throw
-    require(_ERC20AddressList.length == _mFactorList.length, "Input arrays must be of same length");
+    require(_ERC20AddressList.length == _mFactorList.length, "Inconsistent Inputs");
 
     // Enter loop and token details
     for(uint32 i = 0; i < _ERC20AddressList.length; i++) {
       addValidERC20(_ERC20AddressList[i],_mFactorList[i]);
     }
-
-    // Return true
     return true;
   }
 
@@ -379,6 +332,9 @@ contract YieldContract is Ownable, ReentrancyGuard {
    * @notice - Access control: Only Owner
    */
   function removeValidERC20(address _ERC20Address) public onlyOwner() returns(bool ) {
+
+    // Check if Valid ERC20 not equals mxxAddress
+    require(_ERC20Address != mxxAddress,"Cannot remove MXX");
 
     // Check if _ERC20Address has existing yield contracts
     require(ERC20Map[_ERC20Address].noContracts == 0, "Token has existing contracts");
@@ -398,8 +354,6 @@ contract YieldContract is Ownable, ReentrancyGuard {
 
     // Delete ERC20 details for the input address
     delete ERC20Map[_ERC20Address];
-
-    // Return true
     return true;
   }
 
@@ -412,7 +366,7 @@ contract YieldContract is Ownable, ReentrancyGuard {
   function delistValidERC20(address _ERC20Address) public onlyOwner() returns(bool ) {
 
     // Check if ERC20 already removed or delisted. If condition fails, revert
-    require(ERC20Map[_ERC20Address].isValid, "Token is either removed or already delisted");
+    require(ERC20Map[_ERC20Address].isValid, "Token already delisted/removed");
 
     // Delist valid ERC20
     ERC20Map[_ERC20Address].isValid = false;
@@ -428,8 +382,8 @@ contract YieldContract is Ownable, ReentrancyGuard {
   function undelistERC20(address _ERC20Address) public onlyOwner() returns(bool ) {
 
     // Check if address a contract address and if delisted. If condition fails, revert
-    require(_ERC20Address == address(0) || Address.isContract(_ERC20Address),"Input address is not contract address");
-    require(!ERC20Map[_ERC20Address].isValid, "Token is already enrolled");
+    require(_ERC20Address == address(0) || Address.isContract(_ERC20Address),"Not contract address");
+    require(!ERC20Map[_ERC20Address].isValid, "Token already enrolled");
 
     // Delist valid ERC20
     ERC20Map[_ERC20Address].isValid = true;
@@ -445,7 +399,7 @@ contract YieldContract is Ownable, ReentrancyGuard {
   function updateMFactor(address _ERC20Address, uint256 _mFactor) public onlyOwner() returns(bool ) {
 
     // Check if address a contract address and if in the valid ERC20 array. If condition fails, revert
-    require(_ERC20Address == address(0) || Address.isContract(_ERC20Address),"Input address is not contract address");
+    require(_ERC20Address == address(0) || Address.isContract(_ERC20Address),"Not contract address");
 
     // Update mint factor
     ERC20Map[_ERC20Address].mFactor = _mFactor;
@@ -463,7 +417,7 @@ contract YieldContract is Ownable, ReentrancyGuard {
   function updateMFactorList(address[] memory _ERC20AddressList, uint256[] memory _mFactorList) public onlyOwner() returns(bool ) {
 
     // Length of the 2 input arrays must be the same. If condition fails, revert
-    require(_ERC20AddressList.length == _mFactorList.length,"Input array lengths do not match");
+    require(_ERC20AddressList.length == _mFactorList.length,"Inconsistent Inputs");
 
     // Enter the loop, update and return true
     for(uint32 i = 0; i < _ERC20AddressList.length; i++) {
@@ -492,7 +446,7 @@ contract YieldContract is Ownable, ReentrancyGuard {
   function getSubsetValidERC20(uint32 _start, uint32 _end) public view returns(address[] memory ) {
 
     // Check conditions else fail
-    require(_start <= _end, "Invalid start and end limits");
+    require(_start <= _end, "Invalid limits");
 
     // If _end higher than length of array, set end index to last element of the array
     if(_end >= validERC20.length) {
@@ -507,10 +461,7 @@ contract YieldContract is Ownable, ReentrancyGuard {
     for(uint32 i = _start; i <= _end; i++) {
       subsetValidERC20[i - _start] = validERC20[i];
     }
-
-    // Return array
     return(subsetValidERC20);
-    
   }
 
   /**
@@ -522,31 +473,30 @@ contract YieldContract is Ownable, ReentrancyGuard {
    * @param _ERC20Address - The address of the ERC20 token (address(0) if ETH)
    * @param _collateral - The collateral value of the ERC20 token or ETH
    * @param _tenure - The number of days of the agreement
-   * @return - The id of the contract
    * @notice - Collateral to be input - Actual value * (10 power decimals)
    * @notice - For e.g If collateral is 5 USDT (Tether) and decimal is 6, then _collateral is (5 * (10 power 6))
    * Non Reentrant modifier is used to prevent re-entrancy attack
-   * @notice - Access control: Public
+   * @notice - Access control: External
    */
   
-  function createYieldContract(address _ERC20Address, uint256 _collateral, uint16 _tenure) public nonReentrant() payable returns(bytes32 ) {
+  function createYieldContract(address _ERC20Address, uint256 _collateral, uint16 _tenure) external nonReentrant() payable {
 
     // Check if token/ETH is approved to create contracts
-    require(ERC20Map[_ERC20Address].isValid, "Token/Coin is not approved to create yield contract");
+    require(ERC20Map[_ERC20Address].isValid, "Token/Coin not approved");
 
     // Create contractId and check if status inactive (enum state 0)
     bytes32 contractId = keccak256(abi.encodePacked(msg.sender, _ERC20Address, now, allContracts.length));
-    require(contractMap[contractId].contractStatus == Status.inactive, "Contract already exists");
+    require(contractMap[contractId].contractStatus == uint8(Status.inactive), "Contract already exists");
 
     // Check if APY (interest rate is not zero for the tenure)
-    require(tenureApyMap[_tenure] != 0, "No interest rate is set for this tenure");
+    require(tenureApyMap[_tenure] != 0, "No interest rate is set");
 
     // Get decimal value for collaterals
     uint256 collateralDecimals;
     if(_ERC20Address == address(0)) {
 
       // In case of ETH, check to ensure if collateral value match ETH sent
-      require(msg.value == _collateral && msg.value > 0,"Incorrect funds mentioned. ETH not sent properly");
+      require(msg.value == _collateral && msg.value > 0,"Incorrect funds");
 
       // ETH decimals is 18
       collateralDecimals = 10 ** 18;     
@@ -554,10 +504,13 @@ contract YieldContract is Ownable, ReentrancyGuard {
     } else {
 
       // In case of non ETH, check to ensure if msg.value is 0
-      require(msg.value == 0,"Incorrect funds mentioned. ETH value should be value 0 for non ETH collateral");
-      require(_collateral != 0,"Collateral should not be 0");
+      require(msg.value == 0,"Incorrect funds");
+      require(_collateral != 0,"Collateral is 0");
 
       collateralDecimals = 10 ** uint256(ERC20(_ERC20Address).decimals());
+
+      // Transfer collateral
+      ERC20(_ERC20Address).transferFrom(msg.sender, address(this),_collateral);
     }
 
     // Calculate MXX to be Minted
@@ -565,10 +518,8 @@ contract YieldContract is Ownable, ReentrancyGuard {
     uint256 denominator = SafeMath.mul(SafeMath.mul(SafeMath.mul(collateralDecimals, ERC20Map[mxxAddress].mFactor),SafeMath.mul(100,10 ** 4)),365);
     uint256 valueToBeMinted = SafeMath.div(numerator,denominator);
 
-    
-
     // Check the MXX to be minted will result in total MXX allocated for creating yield contracts
-    require(totalAllocatedMxx >= SafeMath.add(mxxMintedFromContract,valueToBeMinted), "MXX minted exceeds total allocated MXX for yield contracts");
+    require(totalAllocatedMxx >= SafeMath.add(mxxMintedFromContract,valueToBeMinted), "Total allocated MXX exceeded");
 
     // Update total MXX minted from yield contracts
     mxxMintedFromContract = SafeMath.add(mxxMintedFromContract , valueToBeMinted);
@@ -578,56 +529,36 @@ contract YieldContract is Ownable, ReentrancyGuard {
     denominator = SafeMath.mul(100,10 ** 4);  
     uint256 valueToBeBurnt = SafeMath.div(numerator,denominator);
 
-    // Get collateral in case of ERC20 tokens, for ETH it is already received via msg.value
-    if(_ERC20Address != address(0)) {
-      ERC20(_ERC20Address).transferFrom(msg.sender, address(this),_collateral);
-    }
-
     // Send valueToBeBurnt to contract fee destination
     Multiplier(mxxAddress).transferFrom(msg.sender, burnAddress, valueToBeBurnt);
 
     // Create contract
-    contractMap[contractId].contractOwner = msg.sender;
-    contractMap[contractId].tokenAddress = _ERC20Address;
-    contractMap[contractId].collateral = _collateral;
-    contractMap[contractId].startTime = now;
-    contractMap[contractId].endTime = SafeMath.add(now, SafeMath.mul(_tenure, 1 days));
-    contractMap[contractId].interest = tenureApyMap[_tenure];
-    contractMap[contractId].tenure = _tenure;
-    contractMap[contractId].mxxToBeMinted = valueToBeMinted;
-    contractMap[contractId].mxxToBeBurnt = valueToBeBurnt;
-    contractMap[contractId].contractStatus = Status.active;
+    contractMap[contractId] = contractDetails(msg.sender,uint48(now),uint48(SafeMath.add(now, SafeMath.mul(_tenure, 1 days))),_ERC20Address,_tenure,tenureApyMap[_tenure],uint8(Status.active),_collateral,valueToBeMinted);
 
     // Push to all contracts and user contracts
     allContracts.push(contractId);
 
     // Increase number of contracts ERC20 details
     ERC20Map[_ERC20Address].noContracts += 1;
-
-    // Emit event
-    emitContractStatus(contractId);
-
-    return(contractId);
   }
 
   /**
    * @dev Early Redeem a yield contract
    * @param _contractId - The Id of the contract
-   * @return - Boolean status - True indicating successful completion
    * Non Reentrant modifier is used to prevent re-entrancy attack
-   * @notice - Access control: Public
+   * @notice - Access control: External
    */
   
-  function earlyRedeemContract(bytes32 _contractId) public nonReentrant() returns(bool ) {
+  function earlyRedeemContract(bytes32 _contractId) external nonReentrant() {
 
     // Check if contract is active
-    require(contractMap[_contractId].contractStatus == Status.active,"Contract is not in active state");
+    require(contractMap[_contractId].contractStatus == uint8(Status.active),"Contract is not active");
 
     // Check if redeemer is the owner
-    require(contractMap[_contractId].contractOwner == msg.sender,"Redeemer is not the owner");
+    require(contractMap[_contractId].contractOwner == msg.sender,"Redeemer is not owner");
 
     // Check if current time is less than end time but greater than start time
-    require(now > contractMap[_contractId].startTime && now < contractMap[_contractId].endTime, "Contract is beyond its end time. It can be claimed");
+    require(now > contractMap[_contractId].startTime && now < contractMap[_contractId].endTime, "Contract is beyond its end time");
 
     // Calculate mxxMintedTillDate
     uint256 numerator = SafeMath.mul(SafeMath.sub(now, contractMap[_contractId].startTime),contractMap[_contractId].mxxToBeMinted);
@@ -665,74 +596,61 @@ contract YieldContract is Ownable, ReentrancyGuard {
     Multiplier(mxxAddress).transfer(burnAddress, penaltyMXXToBurn);
 
     // Updating contract 
-    contractMap[_contractId].startTime = now;
+    contractMap[_contractId].startTime = uint48(now);
     contractMap[_contractId].mxxToBeMinted = SafeMath.sub(contractMap[_contractId].mxxToBeMinted,mxxMintedTillDate);
-    contractMap[_contractId].mxxToBeBurnt = 0;
     contractMap[_contractId].contractOwner = address(0);
-    contractMap[_contractId].contractStatus = Status.openMarket;
-
-    // Emit Updated status
-    emitContractStatus(_contractId);
-
-    return(true);
+    contractMap[_contractId].contractStatus = uint8(Status.openMarket);  
   }
 
   /**
    * @dev Acquire a yield contract in the open market
    * @param _contractId - The Id of the contract
-   * @return - Boolean status - True indicating successful completion
    * Non Reentrant modifier is used to prevent re-entrancy attack
-   * @notice - Access control: Public
+   * @notice - Access control: External
    */
   
-  function acquireYieldContract(bytes32 _contractId) public nonReentrant() payable returns(bool ) {
+  function acquireYieldContract(bytes32 _contractId) external nonReentrant() payable {
 
     // Check if contract is open
-    require(contractMap[_contractId].contractStatus == Status.openMarket,"Contract is not in open market");
+    require(contractMap[_contractId].contractStatus == uint8(Status.openMarket),"Contract not in open market");
 
     // Check if owner is address(0)
-    require(contractMap[_contractId].contractOwner == address(0),"Contract is owned by someone else");
+    require(contractMap[_contractId].contractOwner == address(0),"Contract already owned");
 
     // Get collateral in case of ERC20 tokens, for ETH it is already received via msg.value
     if(contractMap[_contractId].tokenAddress != address(0)) {
 
       // In case of ERC20, ensure no ETH is sent
-      require(msg.value == 0, "ETH should not be sent along with ERC20 collateral");
+      require(msg.value == 0, "ETH should not be sent");
       ERC20(contractMap[_contractId].tokenAddress).transferFrom(msg.sender, address(this),contractMap[_contractId].collateral);
     } else {
 
       // In case of ETH check if money received equals the collateral else revert
-      require(msg.value == contractMap[_contractId].collateral, "Incorrect funds. Please send ETH of equal collateral value");
+      require(msg.value == contractMap[_contractId].collateral, "Incorrect funds");
     }
 
     // Updating contract 
     contractMap[_contractId].contractOwner = msg.sender;
-    contractMap[_contractId].contractStatus = Status.active;
-
-    // Emit Updated status
-    emitContractStatus(_contractId);
-
-    return(true);
+    contractMap[_contractId].contractStatus = uint8(Status.active);    
   }
 
   /**
    * @dev Claim a yield contract in the active market
    * @param _contractId - The Id of the contract
-   * @return - Boolean status - True indicating successful completion
    * Non Reentrant modifier is used to prevent re-entrancy attack
-   * @notice - Access control: Public
+   * @notice - Access control: External
    */
   
-  function claimYieldContract(bytes32 _contractId) public nonReentrant() returns(bool ) {
+  function claimYieldContract(bytes32 _contractId) external nonReentrant() {
 
     // Check if contract is active
-    require(contractMap[_contractId].contractStatus == Status.active,"Contract is not in active state");
+    require(contractMap[_contractId].contractStatus == uint8(Status.active),"Contract is not active");
 
     // Check if owner and msg.sender are the same
-    require(contractMap[_contractId].contractOwner == msg.sender,"Contract is owned by someone else");
+    require(contractMap[_contractId].contractOwner == msg.sender,"Contract owned by someone else");
 
     // Check if current time is greater than contract end time
-    require(now >= contractMap[_contractId].endTime, "Contract cannot be claimed now. It can be early redeemed");
+    require(now >= contractMap[_contractId].endTime, "Too early to claim");
 
     // Return collateral
     if(contractMap[_contractId].tokenAddress == address(0)) {
@@ -750,15 +668,10 @@ contract YieldContract is Ownable, ReentrancyGuard {
 
 
     // Updating contract 
-    contractMap[_contractId].contractStatus = Status.claimed;
+    contractMap[_contractId].contractStatus = uint8(Status.claimed);
 
     // Reduce no of contracts in ERC20 details
-    ERC20Map[contractMap[_contractId].tokenAddress].noContracts -= 1;
-
-    // Emit Updated status
-    emitContractStatus(_contractId);
-
-    return(true);
+    ERC20Map[contractMap[_contractId].tokenAddress].noContracts -= 1;    
   }
 
   /**
@@ -772,7 +685,7 @@ contract YieldContract is Ownable, ReentrancyGuard {
   function getSubsetYieldContracts(uint32 _start, uint32 _end) public view returns(bytes32[] memory ) {
 
     // Check conditions else fail
-    require(_start <= _end, "Invalid start and end limits");
+    require(_start <= _end, "Invalid limits");
 
     // If _end higher than length of array, set end index to last element of the array
     if(_end >= allContracts.length) {
