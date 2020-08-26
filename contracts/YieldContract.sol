@@ -621,7 +621,7 @@ contract YieldContract is Ownable, ReentrancyGuard {
   }
 
   /**
-   * @dev Destory an open market yield contract
+   * @dev Destroy an open market yield contract
    * @param _contractId - The Id of the contract
    * Non Reentrant modifier is used to prevent re-entrancy attack
    * @notice - Access control: External

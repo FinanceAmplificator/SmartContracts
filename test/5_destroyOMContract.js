@@ -11,7 +11,7 @@ contract("YieldContract", function (accounts) {
 
   let yieldContractId;
   
-  it("should not allow non owner to destoy contract", function () {
+  it("should not allow non owner to destroy contract", function () {
     
     // Define variables
     let multiplierInstance;
@@ -111,7 +111,7 @@ contract("YieldContract", function (accounts) {
     });
   });
 
-  it("should not allow owner to destoy active contract", function () {
+  it("should not allow owner to destroy active contract", function () {
     
     // Define variables
     let multiplierInstance;
@@ -192,7 +192,7 @@ contract("YieldContract", function (accounts) {
     });
   });
 
-  it("should allow owner to destory contract successfully", function () {
+  it("should allow owner to destroy contract successfully", function () {
     
     // Define variables
     let multiplierInstance;
