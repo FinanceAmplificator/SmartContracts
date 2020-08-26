@@ -59,14 +59,14 @@ This function will set interest rate for the tenure in days
 This function will set value based on paramType (contract fee, mxx penalty fee, max penalty fee, total allocated)
 
 
-### `addValidERC20(address _ERC20Address, uint256 _mFactor) → bool` (public)
+### `addERC20(address _ERC20Address, uint256 _mFactor) → bool` (public)
 
 - Access control: Only Owner
 
 Adds a valid ERC20 address into the contract
 
 
-### `addValidERC20List(address[] _ERC20AddressList, uint256[] _mFactorList) → bool` (public)
+### `addERC20List(address[] _ERC20AddressList, uint256[] _mFactorList) → bool` (public)
 
 - The length of _ERC20AddressList and _mFactorList must be the same
 - Access control: Only Owner
@@ -74,7 +74,7 @@ Adds a valid ERC20 address into the contract
 Adds a list of valid ERC20 addresses into the contract
 
 
-### `removeValidERC20(address _ERC20Address) → bool` (public)
+### `removeERC20(address _ERC20Address) → bool` (public)
 
 - Access control: Only Owner
 
@@ -110,7 +110,7 @@ Updates the mint factor of a coin/token
 Updates the mint factor for list of coin(s)/token(s)
 
 
-### `getNoOfValidTokens() → uint256` (public)
+### `getNoOfERC20s() → uint256` (public)
 
 - Access control: Public
 

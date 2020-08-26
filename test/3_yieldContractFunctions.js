@@ -5,6 +5,7 @@ const ChainLink = artifacts.require("ChainLink");
 const HuobiToken = artifacts.require("HuobiToken");
 const BasicAttentionToken = artifacts.require("BasicAttentionToken");
 const Multiplier = artifacts.require("Multiplier");
+const multiplierAddress = "0x1E4c15682D1DEC19bFc2b3C833dE40b64fe43613";
 
 contract("YieldContract", function (accounts) {
 
@@ -25,19 +26,19 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = 45;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
 
       // Add ETH as valid token/coin in yieldcontract
-      return YieldContractInstance.addValidERC20(ethAddress,ethMintFactor,{from: owner});
+      return YieldContractInstance.addERC20(ethAddress,ethMintFactor,{from: owner});
 
     }).then(function(result){
 
@@ -72,13 +73,13 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = 45;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -108,13 +109,13 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = 90;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -144,13 +145,13 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = 90;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -182,13 +183,13 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = 90;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -200,7 +201,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Add Tether as valid token/coin in yieldcontract
-      return YieldContractInstance.addValidERC20(tetherInstance.address,tetherMintFactor,{from: owner});
+      return YieldContractInstance.addERC20(tetherInstance.address,tetherMintFactor,{from: owner});
     
     }).then(function(result){
 
@@ -232,13 +233,13 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = 90;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -276,13 +277,13 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = 90;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -318,13 +319,13 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = 90;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -366,13 +367,13 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = 90;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -404,13 +405,13 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = 90;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -450,13 +451,13 @@ contract("YieldContract", function (accounts) {
     let yieldContractId;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -488,8 +489,8 @@ contract("YieldContract", function (accounts) {
       assert.deepEqual(result.tokenAddress,ethAddress,"Yield Collateral Address not returned properly");
       assert.deepEqual(result.collateral.toString(),collateral,"Yield Collateral not returned properly");
       assert.deepEqual(result.tenure.toString(),"90","Yield tenure not returned properly");
-      assert.deepEqual(result.interest.toString(),"500000","Yield APY not returned properly");
-      assert.deepEqual(result.mxxToBeMinted.toString(),"702739726027","MXX minted not returned properly");
+      assert.deepEqual(result.interest.toString(),"2000000","Yield APY not returned properly");
+      assert.deepEqual(result.mxxToBeMinted.toString(),"2810958904109","MXX minted not returned properly");
       assert.deepEqual(result.contractStatus.toString(),"1","Contract status not returned properly");
     });
   });
@@ -512,13 +513,13 @@ contract("YieldContract", function (accounts) {
     let yieldContractId;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -574,8 +575,8 @@ contract("YieldContract", function (accounts) {
       assert.deepEqual(result.tokenAddress,tetherInstance.address,"Yield Collateral Address not returned properly");
       assert.deepEqual(result.collateral.toString(),collateral,"Yield Collateral not returned properly");
       assert.deepEqual(result.tenure.toString(),"180","Yield tenure not returned properly");
-      assert.deepEqual(result.interest.toString(),"1000000","Yield APY not returned properly");
-      assert.deepEqual(result.mxxToBeMinted.toString(),"2474383561","MXX minted not returned properly");
+      assert.deepEqual(result.interest.toString(),"4000000","Yield APY not returned properly");
+      assert.deepEqual(result.mxxToBeMinted.toString(),"9897534246","MXX minted not returned properly");
       assert.deepEqual(result.contractStatus.toString(),"1","Contract status not returned properly");
     });
   });
@@ -612,13 +613,13 @@ contract("YieldContract", function (accounts) {
     let mxxMintedFromContractAfter;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -730,13 +731,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -748,7 +749,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to remove Tether ERC20 from list by owner
-      return YieldContractInstance.removeValidERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.removeERC20(tetherInstance.address,{from: owner});
     }).catch(function(error){
 
       // Print error
@@ -769,13 +770,13 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = "90";
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -787,7 +788,9 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to delist Tether ERC20 from list by owner
-      return YieldContractInstance.delistValidERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.setERC20Validity(tetherInstance.address, false, {
+        from: owner,
+      });
     }).then(function(result){
 
       // Attempt to create a tether contract
@@ -813,13 +816,13 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = "90";
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -831,7 +834,9 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to undelist Tether ERC20 from list by owner
-      return YieldContractInstance.undelistERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.setERC20Validity(tetherInstance.address, true, {
+        from: owner,
+      });
     }).then(function(result){
 
       // Attempt to create a tether contract
@@ -861,7 +866,7 @@ contract("YieldContract", function (accounts) {
     let inactiveYieldContractId = '0x0000000000000000000000000000000000000000000000000000000000000000'
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 
@@ -901,13 +906,13 @@ contract("YieldContract", function (accounts) {
     let yieldContractId;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -949,13 +954,13 @@ contract("YieldContract", function (accounts) {
     let tenureInDays = "0";
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1014,13 +1019,13 @@ contract("YieldContract", function (accounts) {
     let yieldContractId;;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1030,8 +1035,8 @@ contract("YieldContract", function (accounts) {
     
     }).then(function(result){
 
-      // Transfer  5 billion MXX to the contract
-      multiplierInstance.transfer(YieldContractInstance.address,"500000000000000000",{from:owner});
+      // Transfer 1 billion MXX to the contract
+      multiplierInstance.transfer(YieldContractInstance.address,"100000000000000000",{from:owner});
 
     }).then(function(result){
 
@@ -1188,13 +1193,13 @@ contract("YieldContract", function (accounts) {
     let yieldContractId;;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1350,13 +1355,13 @@ contract("YieldContract", function (accounts) {
     let yieldContractId;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1401,13 +1406,13 @@ contract("YieldContract", function (accounts) {
     let newCollateralToPay;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1482,13 +1487,13 @@ contract("YieldContract", function (accounts) {
     let newStartTime;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1565,13 +1570,13 @@ contract("YieldContract", function (accounts) {
     let yieldContractId;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1676,13 +1681,13 @@ contract("YieldContract", function (accounts) {
     let startTimeAfter;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1783,13 +1788,13 @@ contract("YieldContract", function (accounts) {
     let startTimeAfter;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1890,13 +1895,13 @@ contract("YieldContract", function (accounts) {
     
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1924,13 +1929,13 @@ contract("YieldContract", function (accounts) {
     let yieldContractId;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1963,13 +1968,13 @@ contract("YieldContract", function (accounts) {
     let yieldContractId;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -2008,13 +2013,13 @@ contract("YieldContract", function (accounts) {
     let noOfContractsAfter;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -2133,13 +2138,13 @@ contract("YieldContract", function (accounts) {
     let noOfContractsAfter;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address, mxxMintFactor);
+    return YieldContract.deployed(mxxMintFactor);
     }).then(function(instance){
 
       YieldContractInstance = instance;

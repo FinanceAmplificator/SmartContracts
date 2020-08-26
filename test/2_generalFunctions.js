@@ -5,6 +5,7 @@ const ChainLink = artifacts.require("ChainLink");
 const HuobiToken = artifacts.require("HuobiToken");
 const BasicAttentionToken = artifacts.require("BasicAttentionToken");
 const Multiplier = artifacts.require("Multiplier");
+const multiplierAddress = "0x1E4c15682D1DEC19bFc2b3C833dE40b64fe43613";
 
 contract("YieldContract", function (accounts) {
 
@@ -14,17 +15,17 @@ contract("YieldContract", function (accounts) {
     // Define variables
     let multiplierInstance;
     let YieldContractInstance;
-    let expectedInterestRate = "500000"; 
+    let expectedInterestRate = "2000000"; 
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -47,13 +48,13 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -77,13 +78,13 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -108,13 +109,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -137,17 +138,17 @@ contract("YieldContract", function (accounts) {
     // Define variables
     let multiplierInstance;
     let YieldContractInstance;
-    let expectedYieldContractFee = "100000"; 
+    let expectedYieldContractFee = "80000"; 
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -169,7 +170,7 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 
@@ -202,7 +203,7 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 
@@ -242,19 +243,19 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
 
       // Attempt to get MXX address
-      return YieldContractInstance.mxxAddress.call({ from: nonOwner });
+      return YieldContractInstance.MXX_ADDRESS.call({ from: nonOwner });
     }).then(function(result){
 
       // Assert
@@ -271,13 +272,13 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -300,13 +301,13 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -328,7 +329,7 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 
@@ -355,11 +356,11 @@ contract("YieldContract", function (accounts) {
     // Define variables
     let multiplierInstance;
     let YieldContractInstance;
-    let newminEarlyRedeemFee = "1000000";
+    let newminEarlyRedeemFee = "60000";
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 
@@ -399,7 +400,7 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 
@@ -432,7 +433,7 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 
@@ -474,7 +475,7 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 
@@ -507,7 +508,7 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 
@@ -549,7 +550,7 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 

@@ -5,6 +5,7 @@ const ChainLink = artifacts.require("ChainLink");
 const HuobiToken = artifacts.require("HuobiToken");
 const BasicAttentionToken = artifacts.require("BasicAttentionToken");
 const Multiplier = artifacts.require("Multiplier");
+const multiplierAddress = "0x1E4c15682D1DEC19bFc2b3C833dE40b64fe43613";
 
 
 contract("YieldContract", function (accounts) {
@@ -20,15 +21,12 @@ contract("YieldContract", function (accounts) {
     let mxxAmount = "100000000000000000";
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 
         // Deploy yield contract
-        return YieldContract.deployed(
-          multiplierInstance.address,
-          "10000000000000000"
-        );
+        return YieldContract.deployed("10000000000000000");
       })
       .then(function (instance) {
         YieldContractInstance = instance;
@@ -37,7 +35,7 @@ contract("YieldContract", function (accounts) {
         return multiplierInstance.transfer(
           YieldContractInstance.address,
           mxxAmount,
-          {from: owner}
+          { from: owner }
         );
       })
       .then(function (result) {
@@ -64,42 +62,38 @@ contract("YieldContract", function (accounts) {
     let mxxBalanceBefore;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 
         // Deploy yield contract
-        return YieldContract.deployed(
-          multiplierInstance.address,
-          "10000000000000000"
-        );
+        return YieldContract.deployed("10000000000000000");
       })
       .then(function (instance) {
         YieldContractInstance = instance;
 
         // Get MXX balance
-        return multiplierInstance.balanceOf(
-          owner,
-          { from: owner }
-        );
+        return multiplierInstance.balanceOf(owner, { from: owner });
       })
       .then(function (result) {
-
         mxxBalanceBefore = result;
 
         // Attempt to add Tether ERC20 into list by nonOwner
         return YieldContractInstance.withdrawMXX(mxxAmount, { from: owner });
-      }).then(function(result){
-
+      })
+      .then(function (result) {
         // Get MXX balance after
         return multiplierInstance.balanceOf(owner, { from: owner });
+      })
+      .then(function (result) {
+        mxxBalanceAfter = result;
 
-      }).then(function(result){
-          mxxBalanceAfter = result;
-
-          // Assert
-          assert.deepEqual(mxxBalanceAfter.sub(mxxBalanceBefore).toString(),mxxAmount,"MXX not received properly");
-
+        // Assert
+        assert.deepEqual(
+          mxxBalanceAfter.sub(mxxBalanceBefore).toString(),
+          mxxAmount,
+          "MXX not received properly"
+        );
       });
   });
 

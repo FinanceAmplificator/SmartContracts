@@ -5,6 +5,7 @@ const ChainLink = artifacts.require("ChainLink");
 const HuobiToken = artifacts.require("HuobiToken");
 const BasicAttentionToken = artifacts.require("BasicAttentionToken");
 const Multiplier = artifacts.require("Multiplier");
+const multiplierAddress = "0x1E4c15682D1DEC19bFc2b3C833dE40b64fe43613";
 
 contract("YieldContract", function (accounts) {
 
@@ -19,13 +20,13 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -37,7 +38,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to add Tether ERC20 into list by nonOwner
-      return YieldContractInstance.addValidERC20(tetherInstance.address,tetherMintFactor,{from: nonOwner});
+      return YieldContractInstance.addERC20(tetherInstance.address,tetherMintFactor,{from: nonOwner});
     }).catch(function(error){
 
       // Print error message
@@ -57,13 +58,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -75,7 +76,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to add Tether ERC20 into list by owner
-      return YieldContractInstance.addValidERC20(tetherInstance.address,tetherMintFactor,{from: owner});
+      return YieldContractInstance.addERC20(tetherInstance.address,tetherMintFactor,{from: owner});
     }).then(function(result){
 
       // Assert
@@ -93,19 +94,19 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
 
       // Attempt to get number of valid ERC20
-      return YieldContractInstance.getNoOfValidTokens({ from: owner });
+      return YieldContractInstance.getNoOfERC20s({ from: owner });
     }).then(function(result){
 
       // Assert
@@ -123,13 +124,13 @@ contract("YieldContract", function (accounts) {
     let expectedOutput;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -142,7 +143,7 @@ contract("YieldContract", function (accounts) {
       expectedOutput = [multiplierInstance.address,tetherInstance.address];
 
       // Get all valid ERC20 list
-      return YieldContractInstance.getSubsetValidERC20(0,100,{from: nonOwner});
+      return YieldContractInstance.getSubsetERC20List(0,100,{from: nonOwner});
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -163,13 +164,13 @@ contract("YieldContract", function (accounts) {
     let expectedMintFactor = '1003500000000000000';
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -202,19 +203,19 @@ contract("YieldContract", function (accounts) {
     let userMintFactor = "1000000000000000000";
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
 
       // Attempt to add user address into list
-      return YieldContractInstance.addValidERC20(userAddress,userMintFactor,{from: owner});
+      return YieldContractInstance.addERC20(userAddress,userMintFactor,{from: owner});
     }).catch(function(error){
 
       // Print error message
@@ -233,13 +234,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -251,7 +252,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to add Tether ERC20 into list by owner
-      return YieldContractInstance.addValidERC20(tetherInstance.address,tetherMintFactor,{from: owner});
+      return YieldContractInstance.addERC20(tetherInstance.address,tetherMintFactor,{from: owner});
     }).catch(function(error){
 
       // Print error message
@@ -269,13 +270,13 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -287,7 +288,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to remove Tether ERC20 from list by nonOwner
-      return YieldContractInstance.removeValidERC20(tetherInstance.address,{from: nonOwner});
+      return YieldContractInstance.removeERC20(tetherInstance.address,{from: nonOwner});
     }).catch(function(error){
 
       // Print error message
@@ -304,7 +305,7 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
       .then(function (instance) {
         multiplierInstance = instance;
 
@@ -324,7 +325,7 @@ contract("YieldContract", function (accounts) {
         tetherInstance = instance;
 
         // Attempt to remove MXX from list by owner
-        return YieldContractInstance.removeValidERC20(
+        return YieldContractInstance.removeERC20(
           multiplierInstance.address,
           {
             from: owner,
@@ -348,13 +349,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -366,7 +367,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to remove Tether ERC20 from list by owner
-      return YieldContractInstance.removeValidERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.removeERC20(tetherInstance.address,{from: owner});
     }).then(function(result){
 
       // Assert
@@ -383,20 +384,20 @@ contract("YieldContract", function (accounts) {
     let expectedOutput;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
       expectedOutput = [multiplierInstance.address];
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
 
       // Get all valid ERC20 list
-      return YieldContractInstance.getSubsetValidERC20(0,100,{ from: nonOwner });
+      return YieldContractInstance.getSubsetERC20List(0,100,{ from: nonOwner });
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -417,13 +418,13 @@ contract("YieldContract", function (accounts) {
     let expectedMintFactor = "0";
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -455,13 +456,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -473,7 +474,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to remove Tether ERC20 into list by owner
-      return YieldContractInstance.removeValidERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.removeERC20(tetherInstance.address,{from: owner});
     }).catch(function(error){
 
       // Print error message
@@ -495,13 +496,13 @@ contract("YieldContract", function (accounts) {
     let inputMintFactorList = [tetherMintFactor, veChainMintFactor];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -519,7 +520,7 @@ contract("YieldContract", function (accounts) {
       veChainInstance = instance;
 
       // Attempt to add Tether and VeChain ERC20 into list by nonOwner
-      return YieldContractInstance.addValidERC20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: nonOwner});
+      return YieldContractInstance.addERC20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: nonOwner});
     }).catch(function(error){
 
       // Print error message
@@ -541,13 +542,13 @@ contract("YieldContract", function (accounts) {
     let inputMintFactorList = [tetherMintFactor, veChainMintFactor];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -565,7 +566,7 @@ contract("YieldContract", function (accounts) {
       veChainInstance = instance;
 
       // Attempt to add Tether and VeChain ERC20 into list by owner
-      return YieldContractInstance.addValidERC20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: owner});
+      return YieldContractInstance.addERC20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: owner});
     }).then(function(result){
 
       // Assert
@@ -585,13 +586,13 @@ contract("YieldContract", function (accounts) {
     let expectedOutput;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -610,7 +611,7 @@ contract("YieldContract", function (accounts) {
       expectedOutput = [multiplierInstance.address, tetherInstance.address, veChainInstance.address];
 
       // Get all valid ERC20 list
-      return YieldContractInstance.getSubsetValidERC20(0,100,{from: nonOwner});
+      return YieldContractInstance.getSubsetERC20List(0,100,{from: nonOwner});
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -629,13 +630,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -653,11 +654,11 @@ contract("YieldContract", function (accounts) {
       veChainInstance = instance;
 
       // Attempt to remove Tether from list by owner
-      return YieldContractInstance.removeValidERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.removeERC20(tetherInstance.address,{from: owner});
     }).then(function(result){
 
       // Attempt to remove VeChain from list by owner
-      return YieldContractInstance.removeValidERC20(veChainInstance.address,{from: owner});
+      return YieldContractInstance.removeERC20(veChainInstance.address,{from: owner});
     }).then(function(result){
 
       // Assert
@@ -675,20 +676,20 @@ contract("YieldContract", function (accounts) {
     let expectedOutput;
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
       expectedOutput = [multiplierInstance.address]; 
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
 
       // Get all valid ERC20
-      return YieldContractInstance.getSubsetValidERC20(0,100,{from: nonOwner});
+      return YieldContractInstance.getSubsetERC20List(0,100,{from: nonOwner});
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -710,14 +711,14 @@ contract("YieldContract", function (accounts) {
     let expectedMintFactorList = "10000000000000000";
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
       expectedValidERC20 = multiplierInstance.address;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -746,13 +747,13 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -764,11 +765,13 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Add Tether ERC20 into list by owner
-      return YieldContractInstance.addValidERC20(tetherInstance.address, tetherMintFactor,{from: owner});
+      return YieldContractInstance.addERC20(tetherInstance.address, tetherMintFactor,{from: owner});
     }).then(function(result){
 
       // Attempt to delist Tether by non owner
-      return YieldContractInstance.delistValidERC20(tetherInstance.address,{from: nonOwner});
+      return YieldContractInstance.setERC20Validity(tetherInstance.address, false, {
+        from: nonOwner,
+      });
     }).catch(function(error){
 
       // Print error message
@@ -787,13 +790,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -805,7 +808,9 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to delist Tether by owner
-      return YieldContractInstance.delistValidERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.setERC20Validity(tetherInstance.address, false, {
+        from: owner,
+      });
     }).then(function(result){
 
       // Assert
@@ -823,13 +828,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -841,7 +846,9 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to delist Tether again by owner
-      return YieldContractInstance.delistValidERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.setERC20Validity(tetherInstance.address, false, {
+        from: owner,
+      });
     }).catch(function(error){
 
       // Print error message
@@ -860,13 +867,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -878,7 +885,9 @@ contract("YieldContract", function (accounts) {
       veChainInstance = instance;
 
       // Attempt to delist VeChain by owner
-      return YieldContractInstance.delistValidERC20(veChainInstance.address,{from: owner});
+      return YieldContractInstance.setERC20Validity(veChainInstance.address, false, {
+        from: owner,
+      });
     }).catch(function(error){
 
       // Print error message
@@ -897,13 +906,13 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -915,7 +924,9 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to undelist Tether by non owner
-      return YieldContractInstance.undelistERC20(tetherInstance.address,{from: nonOwner});
+      return YieldContractInstance.setERC20Validity(tetherInstance.address, true, {
+        from: nonOwner,
+      });
     }).catch(function(error){
 
       // Print error message
@@ -934,13 +945,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -952,7 +963,9 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to undelist Tether by owner
-      return YieldContractInstance.undelistERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.setERC20Validity(tetherInstance.address, true, {
+        from: owner,
+      });
     }).then(function(result){
 
       // Assert
@@ -970,19 +983,19 @@ contract("YieldContract", function (accounts) {
     let userAddress = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
 
       // Attempt to undelist user address by owner
-      return YieldContractInstance.undelistERC20(userAddress,{from: owner});
+      return YieldContractInstance.setERC20Validity(userAddress, true, { from: owner });
     }).catch(function(error){
 
       // Print error message
@@ -1001,13 +1014,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1019,7 +1032,9 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to undelist Tether again by owner
-      return YieldContractInstance.undelistERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.setERC20Validity(tetherInstance.address, true, {
+        from: owner,
+      });
     }).catch(function(error){
 
       // Print error message
@@ -1053,13 +1068,13 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1093,11 +1108,11 @@ contract("YieldContract", function (accounts) {
       ERC20List.push(basicAttentionTokenInstance.address);
 
       // Adding 4 ERC20 token address into list
-      return YieldContractInstance.addValidERC20List(ERC20List,mintFactorList,{from: owner});
+      return YieldContractInstance.addERC20List(ERC20List,mintFactorList,{from: owner});
     }).then(function(result){
 
       // Attemping to get subset of validERC20 list
-      return YieldContractInstance.getSubsetValidERC20(-1,3,{from: nonOwner});
+      return YieldContractInstance.getSubsetERC20List(-1,3,{from: nonOwner});
     }).catch(function(error){
 
       // Print error message
@@ -1121,13 +1136,13 @@ contract("YieldContract", function (accounts) {
     let expectedOutput = [];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1167,7 +1182,7 @@ contract("YieldContract", function (accounts) {
       expectedOutput.push(basicAttentionTokenInstance.address);
 
       // Attemping to get subset of validERC20 list
-      return YieldContractInstance.getSubsetValidERC20(2,8,{from: nonOwner});
+      return YieldContractInstance.getSubsetERC20List(2,8,{from: nonOwner});
     }).then(function(result){
 
       // Assert
@@ -1189,13 +1204,13 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1231,7 +1246,7 @@ contract("YieldContract", function (accounts) {
       basicAttentionTokenInstance = instance;
 
       // Attemping to get subset of validERC20 list
-      return YieldContractInstance.getSubsetValidERC20(8,2,{from: nonOwner});
+      return YieldContractInstance.getSubsetERC20List(8,2,{from: nonOwner});
     }).catch(function(error){
 
       // Print error message
@@ -1255,13 +1270,13 @@ contract("YieldContract", function (accounts) {
     let expectedOutput = [];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1306,7 +1321,7 @@ contract("YieldContract", function (accounts) {
       basicAttentionTokenInstance = instance;
 
       // Attemping to get subset of validERC20 list
-      return YieldContractInstance.getSubsetValidERC20(1,3,{from: nonOwner});
+      return YieldContractInstance.getSubsetERC20List(1,3,{from: nonOwner});
     }).then(function(result){
 
       // Assert
@@ -1327,13 +1342,13 @@ contract("YieldContract", function (accounts) {
     let inputMintFactorList = [veChainMintFactor];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1351,7 +1366,7 @@ contract("YieldContract", function (accounts) {
       veChainInstance = instance;
 
       // Attempt to add Tether and VeChain ERC20 into list by owner
-      return YieldContractInstance.addValidERC20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: owner});
+      return YieldContractInstance.addERC20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: owner});
     }).catch(function(error){
 
       // Assert
@@ -1371,19 +1386,19 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
 
       // Attempt to add ETH into list by owner
-      return YieldContractInstance.addValidERC20(ethAddress,ethMintFactor,{from: owner});
+      return YieldContractInstance.addERC20(ethAddress,ethMintFactor,{from: owner});
     }).then(function(result){
 
       // Assert
@@ -1405,13 +1420,13 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
     
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1442,19 +1457,19 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
 
       // Attempt to delist ETH by owner
-      return YieldContractInstance.delistValidERC20(ethAddress,{from: owner});
+      return YieldContractInstance.setERC20Validity(ethAddress, false, { from: owner });
     }).then(function(result){
 
       // Get ETH details
@@ -1483,19 +1498,19 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
 
       // Attempt to undelist ETH again by owner
-      return YieldContractInstance.undelistERC20(ethAddress,{from: owner});
+      return YieldContractInstance.setERC20Validity(ethAddress, true, { from: owner });
     }).then(function(result){
 
       // Get ETH details
@@ -1521,13 +1536,13 @@ contract("YieldContract", function (accounts) {
     let nonOwner = accounts[1];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1553,13 +1568,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1589,13 +1604,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1636,13 +1651,13 @@ contract("YieldContract", function (accounts) {
     let owner = accounts[0];
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1676,13 +1691,13 @@ contract("YieldContract", function (accounts) {
     let newVeChainMintFactor = "21200000000000000";
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1715,13 +1730,13 @@ contract("YieldContract", function (accounts) {
     let newVeChainMintFactor = "21200000000000000";
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1748,13 +1763,13 @@ contract("YieldContract", function (accounts) {
     let newVeChainMintFactor = "21200000000000000";
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
@@ -1788,13 +1803,13 @@ contract("YieldContract", function (accounts) {
     let newVeChainMintFactor = "21200000000000000";
 
     // Deploy multiplier contract
-    return Multiplier.deployed()
+    return Multiplier.at(multiplierAddress)
     .then(function(instance){
 
       multiplierInstance = instance;
     
     // Deploy yield contract
-    return YieldContract.deployed(multiplierInstance.address,"10000000000000000")
+    return YieldContract.deployed("10000000000000000")
     }).then(function(instance){
 
       YieldContractInstance = instance;
