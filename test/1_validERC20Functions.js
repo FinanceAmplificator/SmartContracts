@@ -51,7 +51,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to add Tether ERC20 into list by nonOwner
-      return YieldContractInstance.addERC20(tetherInstance.address,tetherMintFactor,{from: nonOwner});
+      return YieldContractInstance.addErc20(tetherInstance.address,tetherMintFactor,{from: nonOwner});
     }).catch(function(error){
 
       // Print error message
@@ -228,7 +228,7 @@ contract("YieldContract", function (accounts) {
       YieldContractInstance = instance;
 
       // Attempt to add user address into list
-      return YieldContractInstance.addERC20(userAddress,userMintFactor,{from: owner});
+      return YieldContractInstance.addErc20(userAddress,userMintFactor,{from: owner});
     }).catch(function(error){
 
       // Print error message
@@ -265,7 +265,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to add Tether ERC20 into list by owner
-      return YieldContractInstance.addERC20(tetherInstance.address,tetherMintFactor,{from: owner});
+      return YieldContractInstance.addErc20(tetherInstance.address,tetherMintFactor,{from: owner});
     }).catch(function(error){
 
       // Print error message
@@ -301,7 +301,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to remove Tether ERC20 from list by nonOwner
-      return YieldContractInstance.removeERC20(tetherInstance.address,{from: nonOwner});
+      return YieldContractInstance.removeErc20(tetherInstance.address,{from: nonOwner});
     }).catch(function(error){
 
       // Print error message
@@ -338,7 +338,7 @@ contract("YieldContract", function (accounts) {
         tetherInstance = instance;
 
         // Attempt to remove MXX from list by owner
-        return YieldContractInstance.removeERC20(
+        return YieldContractInstance.removeErc20(
           multiplierInstance.address,
           {
             from: owner,
@@ -487,7 +487,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to remove Tether ERC20 into list by owner
-      return YieldContractInstance.removeERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.removeErc20(tetherInstance.address,{from: owner});
     }).catch(function(error){
 
       // Print error message
@@ -533,7 +533,7 @@ contract("YieldContract", function (accounts) {
       veChainInstance = instance;
 
       // Attempt to add Tether and VeChain ERC20 into list by nonOwner
-      return YieldContractInstance.adderc20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: nonOwner});
+      return YieldContractInstance.addErc20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: nonOwner});
     }).catch(function(error){
 
       // Print error message
