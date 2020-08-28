@@ -855,14 +855,14 @@ contract YieldContract is Ownable, ReentrancyGuard {
     {
         // If _end higher than length of array, set end index to last element of the array
         if (_end >= allContracts.length) {
-            _end = allContracts.length - 1;
+            _end = allContracts.length.sub(1);
         }
 
         // Check conditions else fail
         require(_start <= _end, "Invalid limits");
 
         // Define return array
-        uint256 noOfElements = _end - _start + 1;
+        uint256 noOfElements = _end.sub(_start).add(1);
         bytes32[] memory subsetYieldContracts = new bytes32[](noOfElements);
 
         // Loop in and add elements from allContracts array
