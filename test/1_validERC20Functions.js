@@ -1,3 +1,16 @@
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 const YieldContract = artifacts.require("YieldContract");
 const Tether = artifacts.require("Tether");
 const VeChain = artifacts.require("VeChain");
@@ -5,7 +18,7 @@ const ChainLink = artifacts.require("ChainLink");
 const HuobiToken = artifacts.require("HuobiToken");
 const BasicAttentionToken = artifacts.require("BasicAttentionToken");
 const Multiplier = artifacts.require("Multiplier");
-const multiplierAddress = "0x1E4c15682D1DEC19bFc2b3C833dE40b64fe43613";
+const multiplierAddress = "0x8A46B2238776d6152d0075733cac26F187D09251";
 
 contract("YieldContract", function (accounts) {
 
@@ -76,7 +89,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to add Tether ERC20 into list by owner
-      return YieldContractInstance.addERC20(tetherInstance.address,tetherMintFactor,{from: owner});
+      return YieldContractInstance.addErc20(tetherInstance.address,tetherMintFactor,{from: owner});
     }).then(function(result){
 
       // Assert
@@ -106,7 +119,7 @@ contract("YieldContract", function (accounts) {
       YieldContractInstance = instance;
 
       // Attempt to get number of valid ERC20
-      return YieldContractInstance.getNoOfERC20s({ from: owner });
+      return YieldContractInstance.getNoOfErc20s({ from: owner });
     }).then(function(result){
 
       // Assert
@@ -143,7 +156,7 @@ contract("YieldContract", function (accounts) {
       expectedOutput = [multiplierInstance.address,tetherInstance.address];
 
       // Get all valid ERC20 list
-      return YieldContractInstance.getSubsetERC20List(0,100,{from: nonOwner});
+      return YieldContractInstance.getSubsetErc20List(0,100,{from: nonOwner});
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -182,7 +195,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Get details of ERC20 (Tether)
-      return YieldContractInstance.ERC20Map.call(tetherInstance.address,{from: nonOwner});
+      return YieldContractInstance.erc20Map.call(tetherInstance.address,{from: nonOwner});
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -367,7 +380,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to remove Tether ERC20 from list by owner
-      return YieldContractInstance.removeERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.removeErc20(tetherInstance.address,{from: owner});
     }).then(function(result){
 
       // Assert
@@ -397,7 +410,7 @@ contract("YieldContract", function (accounts) {
       YieldContractInstance = instance;
 
       // Get all valid ERC20 list
-      return YieldContractInstance.getSubsetERC20List(0,100,{ from: nonOwner });
+      return YieldContractInstance.getSubsetErc20List(0,100,{ from: nonOwner });
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -436,7 +449,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Get details of ERC20 (Tether)
-      return YieldContractInstance.ERC20Map.call(tetherInstance.address,{from: nonOwner});
+      return YieldContractInstance.erc20Map.call(tetherInstance.address,{from: nonOwner});
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -520,7 +533,7 @@ contract("YieldContract", function (accounts) {
       veChainInstance = instance;
 
       // Attempt to add Tether and VeChain ERC20 into list by nonOwner
-      return YieldContractInstance.addERC20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: nonOwner});
+      return YieldContractInstance.adderc20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: nonOwner});
     }).catch(function(error){
 
       // Print error message
@@ -566,7 +579,7 @@ contract("YieldContract", function (accounts) {
       veChainInstance = instance;
 
       // Attempt to add Tether and VeChain ERC20 into list by owner
-      return YieldContractInstance.addERC20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: owner});
+      return YieldContractInstance.addErc20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: owner});
     }).then(function(result){
 
       // Assert
@@ -611,7 +624,7 @@ contract("YieldContract", function (accounts) {
       expectedOutput = [multiplierInstance.address, tetherInstance.address, veChainInstance.address];
 
       // Get all valid ERC20 list
-      return YieldContractInstance.getSubsetERC20List(0,100,{from: nonOwner});
+      return YieldContractInstance.getSubsetErc20List(0,100,{from: nonOwner});
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -654,11 +667,11 @@ contract("YieldContract", function (accounts) {
       veChainInstance = instance;
 
       // Attempt to remove Tether from list by owner
-      return YieldContractInstance.removeERC20(tetherInstance.address,{from: owner});
+      return YieldContractInstance.removeErc20(tetherInstance.address,{from: owner});
     }).then(function(result){
 
       // Attempt to remove VeChain from list by owner
-      return YieldContractInstance.removeERC20(veChainInstance.address,{from: owner});
+      return YieldContractInstance.removeErc20(veChainInstance.address,{from: owner});
     }).then(function(result){
 
       // Assert
@@ -689,7 +702,7 @@ contract("YieldContract", function (accounts) {
       YieldContractInstance = instance;
 
       // Get all valid ERC20
-      return YieldContractInstance.getSubsetERC20List(0,100,{from: nonOwner});
+      return YieldContractInstance.getSubsetErc20List(0,100,{from: nonOwner});
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -724,7 +737,7 @@ contract("YieldContract", function (accounts) {
       YieldContractInstance = instance;
 
       // Get all token details
-      return YieldContractInstance.ERC20Map(multiplierInstance.address,{ from: nonOwner });
+      return YieldContractInstance.erc20Map(multiplierInstance.address,{ from: nonOwner });
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -765,11 +778,11 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Add Tether ERC20 into list by owner
-      return YieldContractInstance.addERC20(tetherInstance.address, tetherMintFactor,{from: owner});
+      return YieldContractInstance.addErc20(tetherInstance.address, tetherMintFactor,{from: owner});
     }).then(function(result){
 
       // Attempt to delist Tether by non owner
-      return YieldContractInstance.setERC20Validity(tetherInstance.address, false, {
+      return YieldContractInstance.setErc20Validity(tetherInstance.address, false, {
         from: nonOwner,
       });
     }).catch(function(error){
@@ -808,7 +821,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to delist Tether by owner
-      return YieldContractInstance.setERC20Validity(tetherInstance.address, false, {
+      return YieldContractInstance.setErc20Validity(tetherInstance.address, false, {
         from: owner,
       });
     }).then(function(result){
@@ -846,7 +859,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to delist Tether again by owner
-      return YieldContractInstance.setERC20Validity(tetherInstance.address, false, {
+      return YieldContractInstance.setErc20Validity(tetherInstance.address, false, {
         from: owner,
       });
     }).catch(function(error){
@@ -885,7 +898,7 @@ contract("YieldContract", function (accounts) {
       veChainInstance = instance;
 
       // Attempt to delist VeChain by owner
-      return YieldContractInstance.setERC20Validity(veChainInstance.address, false, {
+      return YieldContractInstance.setErc20Validity(veChainInstance.address, false, {
         from: owner,
       });
     }).catch(function(error){
@@ -924,7 +937,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to undelist Tether by non owner
-      return YieldContractInstance.setERC20Validity(tetherInstance.address, true, {
+      return YieldContractInstance.setErc20Validity(tetherInstance.address, true, {
         from: nonOwner,
       });
     }).catch(function(error){
@@ -963,7 +976,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to undelist Tether by owner
-      return YieldContractInstance.setERC20Validity(tetherInstance.address, true, {
+      return YieldContractInstance.setErc20Validity(tetherInstance.address, true, {
         from: owner,
       });
     }).then(function(result){
@@ -995,7 +1008,7 @@ contract("YieldContract", function (accounts) {
       YieldContractInstance = instance;
 
       // Attempt to undelist user address by owner
-      return YieldContractInstance.setERC20Validity(userAddress, true, { from: owner });
+      return YieldContractInstance.setErc20Validity(userAddress, true, { from: owner });
     }).catch(function(error){
 
       // Print error message
@@ -1032,7 +1045,7 @@ contract("YieldContract", function (accounts) {
       tetherInstance = instance;
 
       // Attempt to undelist Tether again by owner
-      return YieldContractInstance.setERC20Validity(tetherInstance.address, true, {
+      return YieldContractInstance.setErc20Validity(tetherInstance.address, true, {
         from: owner,
       });
     }).catch(function(error){
@@ -1057,7 +1070,7 @@ contract("YieldContract", function (accounts) {
     let chainLinkMintFactor = "13756700000000000000";
     let basicAttentionTokenInstance;
     let basicAttentionMintFactor = "265100000000000000";
-    let ERC20List = [];
+    let erc20List = [];
     let mintFactorList = [
       veChainMintFactor,
       chainLinkMintFactor,
@@ -1084,35 +1097,35 @@ contract("YieldContract", function (accounts) {
     }).then(function(instance){
 
       veChainInstance = instance;
-      ERC20List.push(veChainInstance.address);
+      erc20List.push(veChainInstance.address);
 
       // Deploy ChainLink
       return ChainLink.deployed()
     }).then(function(instance){
 
       chainLinkInstance = instance;
-      ERC20List.push(chainLinkInstance.address);
+      erc20List.push(chainLinkInstance.address);
 
       // Deploy HuobiToken
       return HuobiToken.deployed()
     }).then(function(instance){
 
       huobiTokenInstance = instance;
-      ERC20List.push(huobiTokenInstance.address);
+      erc20List.push(huobiTokenInstance.address);
 
       // Deploy BasicAttentionToken
       return BasicAttentionToken.deployed()
     }).then(function(instance){
 
       basicAttentionTokenInstance = instance;
-      ERC20List.push(basicAttentionTokenInstance.address);
+      erc20List.push(basicAttentionTokenInstance.address);
 
       // Adding 4 ERC20 token address into list
-      return YieldContractInstance.addERC20List(ERC20List,mintFactorList,{from: owner});
+      return YieldContractInstance.addErc20List(erc20List,mintFactorList,{from: owner});
     }).then(function(result){
 
       // Attemping to get subset of validERC20 list
-      return YieldContractInstance.getSubsetERC20List(-1,3,{from: nonOwner});
+      return YieldContractInstance.getSubsetErc20List(-1,3,{from: nonOwner});
     }).catch(function(error){
 
       // Print error message
@@ -1182,7 +1195,7 @@ contract("YieldContract", function (accounts) {
       expectedOutput.push(basicAttentionTokenInstance.address);
 
       // Attemping to get subset of validERC20 list
-      return YieldContractInstance.getSubsetERC20List(2,8,{from: nonOwner});
+      return YieldContractInstance.getSubsetErc20List(2,8,{from: nonOwner});
     }).then(function(result){
 
       // Assert
@@ -1246,7 +1259,7 @@ contract("YieldContract", function (accounts) {
       basicAttentionTokenInstance = instance;
 
       // Attemping to get subset of validERC20 list
-      return YieldContractInstance.getSubsetERC20List(8,2,{from: nonOwner});
+      return YieldContractInstance.getSubsetErc20List(8,2,{from: nonOwner});
     }).catch(function(error){
 
       // Print error message
@@ -1321,7 +1334,7 @@ contract("YieldContract", function (accounts) {
       basicAttentionTokenInstance = instance;
 
       // Attemping to get subset of validERC20 list
-      return YieldContractInstance.getSubsetERC20List(1,3,{from: nonOwner});
+      return YieldContractInstance.getSubsetErc20List(1,3,{from: nonOwner});
     }).then(function(result){
 
       // Assert
@@ -1366,7 +1379,7 @@ contract("YieldContract", function (accounts) {
       veChainInstance = instance;
 
       // Attempt to add Tether and VeChain ERC20 into list by owner
-      return YieldContractInstance.addERC20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: owner});
+      return YieldContractInstance.addErc20List([tetherInstance.address, veChainInstance.address],inputMintFactorList,{from: owner});
     }).catch(function(error){
 
       // Assert
@@ -1398,7 +1411,7 @@ contract("YieldContract", function (accounts) {
       YieldContractInstance = instance;
 
       // Attempt to add ETH into list by owner
-      return YieldContractInstance.addERC20(ethAddress,ethMintFactor,{from: owner});
+      return YieldContractInstance.addErc20(ethAddress,ethMintFactor,{from: owner});
     }).then(function(result){
 
       // Assert
@@ -1432,7 +1445,7 @@ contract("YieldContract", function (accounts) {
       YieldContractInstance = instance;
 
       // Get details of ERC20 (Tether)
-      return YieldContractInstance.ERC20Map.call(ethAddress,{from: nonOwner});
+      return YieldContractInstance.erc20Map.call(ethAddress,{from: nonOwner});
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -1469,11 +1482,11 @@ contract("YieldContract", function (accounts) {
       YieldContractInstance = instance;
 
       // Attempt to delist ETH by owner
-      return YieldContractInstance.setERC20Validity(ethAddress, false, { from: owner });
+      return YieldContractInstance.setErc20Validity(ethAddress, false, { from: owner });
     }).then(function(result){
 
       // Get ETH details
-      return YieldContractInstance.ERC20Map.call(ethAddress,{from: owner});
+      return YieldContractInstance.erc20Map.call(ethAddress,{from: owner});
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -1510,11 +1523,11 @@ contract("YieldContract", function (accounts) {
       YieldContractInstance = instance;
 
       // Attempt to undelist ETH again by owner
-      return YieldContractInstance.setERC20Validity(ethAddress, true, { from: owner });
+      return YieldContractInstance.setErc20Validity(ethAddress, true, { from: owner });
     }).then(function(result){
 
       // Get ETH details
-      return YieldContractInstance.ERC20Map.call(ethAddress,{from: owner});
+      return YieldContractInstance.erc20Map.call(ethAddress,{from: owner});
     }).then(function(result){
 
       // Check if the result matches expected output
@@ -1626,7 +1639,7 @@ contract("YieldContract", function (accounts) {
     }).then(function(result){
 
       // Get VeChain token details
-      return YieldContractInstance.ERC20Map.call(veChainInstance.address,{from: owner});
+      return YieldContractInstance.erc20Map.call(veChainInstance.address,{from: owner});
     }).then(function(result){
 
       //Assert
@@ -1667,7 +1680,7 @@ contract("YieldContract", function (accounts) {
     }).then(function(result){
 
       // Get ETH token details
-      return YieldContractInstance.ERC20Map.call(ethAddress, { from: owner });
+      return YieldContractInstance.erc20Map.call(ethAddress, { from: owner });
     }).then(function(result){
 
       //Assert
